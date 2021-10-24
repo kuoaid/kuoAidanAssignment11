@@ -19,27 +19,29 @@ void *talloc(size_t size) {
         activeList->c.car = new_anything;
         activeList->c.cdr = NULL;
     }else{
-        Value* curr_pointer = activeList;//is this a direct copy?
+        Value* curr_pointer = activeList;
         while(curr_pointer->c.cdr != NULL){
         curr_pointer = curr_pointer->c.cdr;
         }
+        //now, curr_pointer is a null value at the end of active_list
         curr_pointer = malloc(sizeof(Value));
         curr_pointer->type = CONS_TYPE;
         curr_pointer->c.car = new_anything;
         curr_pointer->c.cdr = NULL;
         free(curr_pointer);
     }
-
     return new_anything;
 }
 
 
 void tfreeHelper(Value *list) {
-    if (list->c.cdr != NULL) {
+    if(list==NULL){
+        free(list);
+    }else if(list->c.cdr != NULL) {
         tfreeHelper(list->c.cdr);
-    }
+        }
     free(list->c.car);
-    //free(list);//free list->c.car
+    free(list);
 }
 
 // Free all pointers allocated by talloc, as well as whatever memory you
