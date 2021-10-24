@@ -29,7 +29,7 @@ void *talloc(size_t size) {
         curr_pointer->c.cdr = NULL;
         free(curr_pointer);
     }
-    
+
     return new_anything;
 }
 
@@ -39,7 +39,7 @@ void tfreeHelper(Value *list) {
         tfreeHelper(list->c.cdr);
     }
     free(list->c.car);
-    free(list);//free list->c.car
+    //free(list);//free list->c.car
 }
 
 // Free all pointers allocated by talloc, as well as whatever memory you
