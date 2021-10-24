@@ -85,9 +85,7 @@ Value* makeNewValue(Value* list){
 
         case STR_TYPE:
             new_val->type = STR_TYPE;
-            new_val->s = talloc(
-                sizeof(char)*(1+strlen(list->s)));
-            strcpy(new_val->s, list->s);
+            new_val->s = list->s;
             break;
 
         case CONS_TYPE:
@@ -110,7 +108,9 @@ Value* makeNewValue(Value* list){
     }
     return new_val;
 }
-
+//reverse will produce a new list with a new set of Value nodes of type CONS_TYPE, 
+//but the car values in these nodes will not be copied from the old list this time 
+//(a comment in linkedlist.h elaborates on this). 
 Value *reverse(Value *list) {
 
     Value* next_value_in_reverse = makeNull();

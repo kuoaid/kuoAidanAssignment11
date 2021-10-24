@@ -27,8 +27,9 @@ void *talloc(size_t size) {
         curr_pointer->type = CONS_TYPE;
         curr_pointer->c.car = new_anything;
         curr_pointer->c.cdr = NULL;
+        free(curr_pointer);
     }
-
+    
     return new_anything;
 }
 
@@ -46,8 +47,6 @@ void tfreeHelper(Value *list) {
 // that talloc may be called again after tfree is called...
 void tfree() {
     tfreeHelper(activeList);
-    //free(activeList);
-    activeList = NULL;
 }
 
 // Replacement for the C function 'exit' that consists of two lines: it calls
