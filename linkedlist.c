@@ -21,7 +21,7 @@ Once you have done that, you can begin implementing your functions and testing a
 */
 
 Value *makeNull() {
-    Value* new_value = malloc(sizeof(Value));
+    Value* new_value = talloc(sizeof(Value));
     new_value->type = NULL_TYPE;
     return new_value;
 }
@@ -33,7 +33,7 @@ bool isNull(Value *value) {
 
 Value *cons(Value *newCar, Value *newCdr) {
 
-    Value* returned_cons_type = malloc(sizeof(Value));
+    Value* returned_cons_type = talloc(sizeof(Value));
 
     //copy over, and return.
     returned_cons_type->type = CONS_TYPE;
@@ -77,7 +77,7 @@ void display(Value *list) {
 }
 
 Value* makeNewValue(Value* list){
-    Value* new_val = malloc(sizeof(Value));
+    Value* new_val = talloc(sizeof(Value));
     switch(list->type){
         case NULL_TYPE://comment this out later to see if default handles this for me.
             new_val->type=NULL_TYPE;
@@ -85,7 +85,7 @@ Value* makeNewValue(Value* list){
 
         case STR_TYPE:
             new_val->type = STR_TYPE;
-            new_val->s = malloc(
+            new_val->s = talloc(
                 sizeof(char)*(1+strlen(list->s)));
             strcpy(new_val->s, list->s);
             break;
@@ -109,27 +109,6 @@ Value* makeNewValue(Value* list){
             break;
     }
     return new_val;
-    // Value* new_val;
-    // switch(car(list)->type){
-    //     case NULL_TYPE://comment this out later to see if default handles this for me.
-    //         new_val->type=NULL_TYPE;
-    //         break;
-    //     case STR_TYPE:
-    //         new_val = memcpy(malloc(sizeof(Value)), list, sizeof(Value));
-    //         new_val->s = malloc(
-    //             sizeof(char)*(1+strlen(list->s)));
-    //         strcpy(new_val->s, list->s);
-    //         break;
-    //     case CONS_TYPE:
-    //         new_val = memcpy(malloc(sizeof(Value)), list, sizeof(Value));
-    //         new_val->c.car = makeNewValue(car(list));
-    //         new_val->c.cdr = makeNewValue(cdr(list));
-    //         break;
-    //     default:
-    //         new_val = memcpy(malloc(sizeof(Value)), list, sizeof(Value));
-    //         break;
-    // }
-    // return new_val;
 }
 
 Value *reverse(Value *list) {
@@ -143,18 +122,6 @@ Value *reverse(Value *list) {
         next_value_in_reverse = new_node;
     }
     return next_value_in_reverse;
-
-    // //populate an array of pointers in old order.
-    // int total_length = length(list);
-    // Value* array_of_vals[total_length];
-    // for(int i = 0; i < total_length; i++){
-    //     array_of_vals[i]=makeNewValue(list);
-    //     if(i != total_length-1){list = cdr(list);}
-    // }
-
-    // //work with each elements of the array to reverse the order.
-    // for(int i = total_length-1; i>=1; i--){array_of_vals[i]->c.cdr = array_of_vals[i-1];}
-    // return array_of_vals[total_length-1];
 }
 
 int length(Value *value) {

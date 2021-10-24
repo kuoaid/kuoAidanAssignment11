@@ -4,8 +4,8 @@
 #ifndef _TALLOC
 #define _TALLOC
 
-// Replacement for malloc that stores the pointers allocated. It should store
-// the pointers in a linked list, and you have license here to duplicate code
+// Replacement for malloc that stores the pointers allocated. 
+//It should store the pointers in a linked list, and you have license here to duplicate code
 // that you wrote for linkedlist.c. To be clear, don't actually call functions 
 // that are defined in linkedlist.h, because then you'll end up with circular
 // dependencies, since you'll be using talloc in linkedlist.c.

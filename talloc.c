@@ -7,27 +7,29 @@
 // Global variable holding the head of the active list (i.e., the linked
 // list containing pointers to all of the memory that has been allocated
 // via calls to talloc).
-Value *activeList = NULL;
+Value* activeList = NULL;
 
 void *talloc(size_t size) {
+    
+    void* new_anything = malloc(size);
 
-    Value* new_value = malloc(size);
-    new_value->c.cdr = NULL;
-    new_value->type = NULL_TYPE;
-
-    //if no list yet, make list
     if (activeList == NULL) {
-        activeList = new_value;
-        //activeList->c.cdr=malloc(sizeof(Value));
-    } else {
-
-        Value* curr_pointer = activeList;
+        activeList = malloc(sizeof(Value));
+        activeList->type = CONS_TYPE;
+        activeList->c.car = new_anything;
+        activeList->c.cdr = NULL;
+    }else{
+        Value* curr_pointer = activeList;//is this a direct copy?
         while(curr_pointer->c.cdr != NULL){
-            curr_pointer = curr_pointer->c.cdr;
+        curr_pointer = curr_pointer->c.cdr;
         }
-        curr_pointer->c.cdr = new_value;
+        curr_pointer = malloc(sizeof(Value));
+        curr_pointer->type = CONS_TYPE;
+        curr_pointer->c.car = new_anything;
+        curr_pointer->c.cdr = NULL;
     }
-    return new_value;
+
+    return new_anything;
 }
 
 
@@ -35,7 +37,8 @@ void tfreeHelper(Value *list) {
     if (list->c.cdr != NULL) {
         tfreeHelper(list->c.cdr);
     }
-    free(list);
+    free(list->c.car);
+    free(list);//free list->c.car
 }
 
 // Free all pointers allocated by talloc, as well as whatever memory you
@@ -43,7 +46,7 @@ void tfreeHelper(Value *list) {
 // that talloc may be called again after tfree is called...
 void tfree() {
     tfreeHelper(activeList);
-    free(activeList);
+    //free(activeList);
     activeList = NULL;
 }
 
