@@ -11,26 +11,23 @@ Value* activeList = NULL;
 
 void *talloc(size_t size) {
     
-    void* new_anything = malloc(size);
+    Value* new_pointer = malloc(sizeof(Value));
+    new_pointer->type = PTR_TYPE;
+    new_pointer->p = malloc(size);
 
     if (activeList == NULL) {
         activeList = malloc(sizeof(Value));
         activeList->type = CONS_TYPE;
-        activeList->c.car = new_anything;
+        activeList->c.car = new_pointer;
         activeList->c.cdr = NULL;
     }else{
-        Value* curr_pointer = activeList;
-        while(curr_pointer->c.cdr != NULL){
-        curr_pointer = curr_pointer->c.cdr;
-        }
-        //now, curr_pointer is a null value at the end of active_list
-        curr_pointer = malloc(sizeof(Value));
-        curr_pointer->type = CONS_TYPE;
-        curr_pointer->c.car = new_anything;
-        curr_pointer->c.cdr = NULL;
-        free(curr_pointer);
+        Value* new_cons = malloc(sizeof(Value));
+        new_cons->type = CONS_TYPE;
+        new_cons->c.car = new_pointer;
+        new_cons->c.cdr = activeList;
+        activeList = new_cons;
     }
-    return new_anything;
+    return new_pointer->p;
 }
 
 
@@ -40,6 +37,8 @@ void tfreeHelper(Value *list) {
     }else if(list->c.cdr != NULL) {
         tfreeHelper(list->c.cdr);
         }
+        
+    free(list->c.car->p);
     free(list->c.car);
     free(list);
 }
@@ -49,6 +48,8 @@ void tfreeHelper(Value *list) {
 // that talloc may be called again after tfree is called...
 void tfree() {
     tfreeHelper(activeList);
+    activeList=NULL;
+    
 }
 
 // Replacement for the C function 'exit' that consists of two lines: it calls

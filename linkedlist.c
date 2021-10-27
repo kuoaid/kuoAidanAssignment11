@@ -103,6 +103,11 @@ Value* makeNewValue(Value* list){
             new_val->d = list->d;
             break;
 
+        case PTR_TYPE:
+            new_val->type = PTR_TYPE;
+            new_val->p = list->p;
+            break;
+
         default:
             break;
     }
